@@ -1,270 +1,274 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="tr">
+<!DOCTYPE html>
+<html>
 <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>MaviTm Jquery Takvim Uygulaması</title>	
-		<link href="style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="jquery.js" charset="utf-8"></script>
-		<script type="text/javascript" src="jquery.takvim.js" charset="utf-8"></script>
-        <script type="text/javascript">
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-36578934-1']);
-          _gaq.push(['_trackPageview']);
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
-        </script>		
+	<meta charset="utf-8" />
+	<title>MaviTm Jquery Takvim Uygulaması</title>
+
+
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<link href="theme-desert.css" rel="stylesheet">
+	<style>
+		pre {
+			font-family: monospace,monospace;
+			font-size: .9em;
+			line-height: 130%;
+		}
+		pre.prettyprint {
+			border: medium none;
+			border-radius: 4px;
+			padding: 13px 16px;
+		}
+	</style>
 </head>
 <body>
+
 <h1>MaviTm Jquery Takvim Uygulaması</h1>
+
 <!--
 <a style="position:fixed; top:45px; right:15px; display:block; padding:5px 10px; color:#FFF; font-size:16px; background-color:#333;" href="jsTakvim.rar" target="_blank">Rar Download</a>
-
 <a style="position:fixed; top:75px; right:15px; display:block; padding:5px 10px; color:#FFF; font-size:16px; background-color:#333;" href="mavitm_Jquery_takvim.zip" target="_blank">Zip Download</a>
 -->
+
 <a style="position:fixed; top:15px; right:15px; display:block; padding:5px 10px; color:#FFF; font-size:16px; background-color:#333;" href="http://sourceforge.net/projects/jquerytakvim/" target="_blank">Download</a>
 
 <h2>1.5 te yeni Özellikler.</h2>
 
 <h4>Yeni eklenen tetikleyicier</h4>
 <p>
-    Ayarlarda onceUygula ve sonraUygula isimlerinde iki farklı tetikleyici eklendi. <br />
-    onceUygula metodu tanimlanirsa takvim govdesi olusmadan calisan ve this ile degiskenlere ulasir set veya get edebilirsiniz.
-    Metoda parametre eklerseniz this haricinde  aktif olan inputa bu parametre ile erişebilirsiniz. this sadece sınıf degiskenlerini sunar.<br />
-    sonraUygula ayni onceUygula mantığı ile aynı düzende çalışır ve inputa gun bilgisi yazıldıktan sonra işlem yapar
+	Ayarlarda onceUygula ve sonraUygula isimlerinde iki farklı tetikleyici eklendi. <br>
+	onceUygula metodu tanimlanirsa takvim govdesi olusmadan calisan ve this ile degiskenlere ulasir set veya get edebilirsiniz.
+	Metoda parametre eklerseniz this haricinde  aktif olan inputa bu parametre ile erişebilirsiniz. this sadece sınıf degiskenlerini sunar.<br>
+	sonraUygula ayni onceUygula mantığı ile aynı düzende çalışır ve inputa gun bilgisi yazıldıktan sonra işlem yapar
 </p>
-
-<p></p>
-
 
 <h2>Örnekler : </h2>
 <p>Haftanın 1., 3., 5. ve 7. günlerini engellemek için.</p>
-    <input type="text" name="tarih" class="rdate" id="checkin" />
-    <input type="text" name="tarih" class="rdate" id="checkout" />
-		<pre style="border:1px solid #CCC; padding:5px; color:#063;">
-        $('.rdate').mavitmTakvim({
-                    baslangicYil:2005,
-                    bitisYil:2035,
-                    oncesiSecme:true,
-                    onceUygula: function(tag){
-                        if($(tag).attr("id") == "checkout"){
+	<input type="text" name="tarih" class="rdate" id="checkin" />
+	<input type="text" name="tarih" class="rdate" id="checkout" />
+<pre class="prettyprint">
+$('.rdate').mavitmTakvim({
+	baslangicYil:2005,
+	bitisYil:2035,
+	oncesiSecme:true,
+	onceUygula: function(tag){
+		if ($(tag).attr("id") == "checkout") {
+			this._aktifDate = new Date();
 
-                            this._aktifDate = new Date();
+			var dates = $("#checkin").val().split('/'); ////0-gun,1-ay,2-yil
+			if(dates.length > 1) {
+				var d = new Date(dates[1] + "/" + dates[0] + "/" + dates[2]);
+				d.setDate(d.getDate() + 1);
+				this._aktifDate = d;
+			}
+		} else {
+			this._aktifDate = new Date();
+		}
+	},
+	sonraUygula : function(tag){
 
-                            var dates = $("#checkin").val().split('/'); ////0-gun,1-ay,2-yil
-                            if(dates.length > 1) {
-                                var d = new Date(dates[1] + "/" + dates[0] + "/" + dates[2]);
-                                d.setDate(d.getDate() + 1);
-                                this._aktifDate = d;
-                            }
-                        }else{
-                            this._aktifDate = new Date();
-                        }
-                    },
-                    sonraUygula : function(tag){
+		if($(tag).attr("id") == "checkin"){
+			var eleman = $(tag);
+			var kacGun = parseInt($(tag).attr("data-plusday"));
+			if(!kacGun){kacGun = 1;}
+			var dates = eleman.val().split('/'); ////0-gun,1-ay,2-yil
+			var d = new Date(dates[1]+"/"+dates[0]+"/"+dates[2]);
+			d.setDate(d.getDate()+kacGun);
+			$("#checkout").val(d.getDate()+"/"+(d.getMonth() + 1)+"/"+ d.getFullYear());
+		}
 
-                        if($(tag).attr("id") == "checkin"){
-                            var eleman = $(tag);
-                            var kacGun = parseInt($(tag).attr("data-plusday"));
-                            if(!kacGun){kacGun = 1;}
-                            var dates = eleman.val().split('/'); ////0-gun,1-ay,2-yil
-                            var d = new Date(dates[1]+"/"+dates[0]+"/"+dates[2]);
-                            d.setDate(d.getDate()+kacGun);
-                            $("#checkout").val(d.getDate()+"/"+(d.getMonth() + 1)+"/"+ d.getFullYear());
-                        }
+	}
+});
+</pre>
 
-                    }
-                });
-		</pre>
+	<hr style="margin:10px 0px;" />
 
-  		<hr style="margin:10px 0px;" />
-        
 <p>23 nisan, 30 ağustos, 29 ekim ve hafta sonları seçilmesin ve haziran 8,11,27,28 günleride seçilmesin. ve haftanın 1,3,5,7. günleride seçilmesin</p>
     <input type="text" name="tarih" class="rdate2" />
-		<pre style="border:1px solid #CCC; padding:5px; color:#063;">
-        $('.rdate2').mavitmTakvim({
-                    baslangicYil:2005,
-                    bitisYil:2035,
-                    oncesiSecme:true,
-                    engelliHaftaGun:'1,3,5,7',
-                    engelliAyGun:{4:[23],8:[30],10:[29],6:[27,28,11,8]}
-                });
-		</pre>
+<pre class="prettyprint">
+$('.rdate2').mavitmTakvim({
+	baslangicYil:2005,
+	bitisYil:2035,
+	oncesiSecme:true,
+	engelliHaftaGun:'1,3,5,7',
+	engelliAyGun:{4:[23],8:[30],10:[29],6:[27,28,11,8]}
+});
+</pre>
 
-  		<hr style="margin:10px 0px;" />
+  	<hr style="margin:10px 0px;" />
 
 
-<p>      	Geçmişte kalan günlerin seçilmesini engeller ve 2005 yılından 2035 yılı arası gösterim yapar
-        </p>
+<p>Geçmişte kalan günlerin seçilmesini engeller ve 2005 yılından 2035 yılı arası gösterim yapar</p>
 
-		<input type="text" name="tarih" class="date" />
-        
-        <pre style="border:1px solid #CCC; padding:5px; color:#063;">
+	<input type="text" name="tarih" class="date" />
+
+<pre class="prettyprint">
 $('.date').mavitmTakvim({
-        baslangicYil:2005,
-        bitisYil:2035,
-        oncesiSecme:true
-    });
-		</pre>
-        
-        <hr style="margin:10px 0px;" />
-        
-        <p>
-        	2008 yılından 2011 yılı arası gösterim yapar, Önceki tarihlere seçim yapılabilinir, ay isimlerini değiştirir.
-        </p>
-        
-		<input type="text" name="tarih" class="date2" />
-        <pre style="border:1px solid #CCC; padding:5px; color:#063;">
+	baslangicYil:2005,
+	bitisYil:2035,
+	oncesiSecme:true
+});
+</pre>
+
+	<hr style="margin:10px 0px;" />
+
+	<p>
+		2008 yılından 2011 yılı arası gösterim yapar, Önceki tarihlere seçim yapılabilinir, ay isimlerini değiştirir.
+	</p>
+
+	<input type="text" name="tarih" class="date2" />
+<pre class="prettyprint">
 $('.date2').mavitmTakvim({
-        baslangicYil:2008,
-        bitisYil:2011,
-        oncesiSecme:false,
-        ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
-    });
-		</pre>
-        
-        
-        <hr style="margin:10px 0px;" />
-        
-        <p>
-        	Önceki tarihlere seçim yapılabilinir, ay isimlerini değiştirir, d-m-Y olarak değer dönderir.
-        </p>
-        
-		<input type="text" name="tarih" class="date3" />
-        <pre style="border:1px solid #CCC; padding:5px; color:#063;">
+	baslangicYil:2008,
+	bitisYil:2011,
+	oncesiSecme:false,
+	ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
+});
+</pre>
+
+	<hr style="margin:10px 0px;" />
+
+	<p>
+		Önceki tarihlere seçim yapılabilinir, ay isimlerini değiştirir, d-m-Y olarak değer dönderir.
+	</p>
+
+	<input type="text" name="tarih" class="date3" />
+<pre class="prettyprint">
 $('.date3').mavitmTakvim({
-        oncesiSecme:false,
-        ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
-        tarihFormat:'d-m-Y'
-    });
-		</pre>
-        
-        <hr style="margin:10px 0px;" />
-        
-        
-        <h2>Ayarlar :</h2>
-        
-        <p>Default Ayarları (Belirtilmezse varsayılan alacağı değerler)</p>
-        <pre style="border:1px solid #CCC; padding:5px; color:#063;">
-        var defaults = {
-            'baslangicYil' : bugun.getFullYear(),
-            'bitisYil' : (bugun.getFullYear() + 5),
-            'oncesiSecme' : true,
-            'engelliHaftaGun': false,
-            'engelliAyGun': false,
-            'ay' : 'Ocak,Subat,Mart,Nisan,Mayis,Haziran,Temmuz,Agustos,Eylul,Ekim,Kasim,Aralik',
-            'gunler' : 'Pt,S,Ça,Pe,C,Ct,P',
-            'bugunText' : 'Bugün',
-            'kapatText' : 'Kapat',
-            'ileriText' : 'İleri',
-            'geriText' : 'Geri',
-            'tarihFormat':'d/m/Y',
-            'onceUygula' : function(){},
-            'sonraUygula' : function(){},
-        }
-        </pre>
-        
-        
+	oncesiSecme:false,
+	ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
+	tarihFormat:'d-m-Y'
+});
+</pre>
+
+	<hr style="margin:10px 0px;" />
+
+	<h2>Ayarlar :</h2>
+
+	<p>Default Ayarları (Belirtilmezse varsayılan alacağı değerler)</p>
+<pre class="prettyprint">
+var defaults = {
+	'baslangicYil' : bugun.getFullYear(),
+	'bitisYil' : (bugun.getFullYear() + 5),
+	'oncesiSecme' : true,
+	'engelliHaftaGun': false,
+	'engelliAyGun': false,
+	'ay' : 'Ocak,Subat,Mart,Nisan,Mayis,Haziran,Temmuz,Agustos,Eylul,Ekim,Kasim,Aralik',
+	'gunler' : 'Pt,S,Ça,Pe,C,Ct,P',
+	'bugunText' : 'Bugün',
+	'kapatText' : 'Kapat',
+	'ileriText' : 'İleri',
+	'geriText' : 'Geri',
+	'tarihFormat':'d/m/Y',
+	'onceUygula' : function(){},
+	'sonraUygula' : function(){},
+}
+</pre>
+
 <h2>Css Kodları :</h2>
-        <p>indireceğiniz sıkıştırılmış dosya içerisinde bir kaç farklı css kodları mevcut. En basit hali ile alttaki css te uygulayabilirsiniz.</p>
-        <p>Farklı css görünümlerini incelemek için <a href="demo.php">buraya tıklayınız.</a> 
-        <pre style="border:1px solid #CCC; padding:5px; color:#F30;">
-            .mavitmTakvim{width:220px; font-size:12px; background-color:#FFF;}
-            .mavitmTakvim span{cursor: pointer;}
-            .mavitmTakvim .takvimGunleri{ border-left:1px solid #CCC;}
-            .mavitmTakvim .takvimGunleri th{ border-bottom: 1px solid #CCC; border-right: 1px solid #CCC; background-color:#069; color:#FFF; padding:5px;}
-            .mavitmTakvim .takvimGunleri td{border-bottom: 1px solid #CCC; border-right: 1px solid #CCC; text-align:center;}
-            .mavitmTakvim .takvimGunleri td span{padding: 5px; display: block;}
-            .mavitmTakvim .takvimGunleri td span.izinsiz{background-color:#CCC; color:#666; cursor:default !important;}
-            .mavitmTakvim .takvimGunleri td span.izinli:hover{background-color:#069; color:#FFF;}
-            .mavitmTakvim .takvimHead{padding:3px; height:25px; background-color:#E1E1E1;}
-            .mavitmTakvim .takvimHead .takvimgeri{ float:left; margin-right:5px; margin-top:8px;}
-            .mavitmTakvim .takvimHead .takvimileri{ float:right; margin-top:8px;}
-            .mavitmTakvim .takvimHead select{-moz-border-radius: 5px;-webkit-border-radius:5px;border-radius:5px; padding:3px; float:left; border:1px solid #CCC;}
-            .mavitmTakvim .takvimFooter{height:15px; padding:4px; background-color:#E1E1E1;}
-            .mavitmTakvim .takvimFooter .bugunuYaz{float:left;}
-            .mavitmTakvim .takvimFooter .takvimKapat{float:right;}
-        </pre>
-        
-        
-        
+		<p>indireceğiniz sıkıştırılmış dosya içerisinde bir kaç farklı css kodları mevcut. En basit hali ile alttaki css te uygulayabilirsiniz.</p>
+		<p>Farklı css görünümlerini incelemek için <a href="demo.php">buraya tıklayınız.</a> 
+<pre class="prettyprint">
+	.mavitmTakvim{width:220px; font-size:12px; background-color:#FFF;}
+	.mavitmTakvim span{cursor: pointer;}
+	.mavitmTakvim .takvimGunleri{ border-left:1px solid #CCC;}
+	.mavitmTakvim .takvimGunleri th{ border-bottom: 1px solid #CCC; border-right: 1px solid #CCC; background-color:#069; color:#FFF; padding:5px;}
+	.mavitmTakvim .takvimGunleri td{border-bottom: 1px solid #CCC; border-right: 1px solid #CCC; text-align:center;}
+	.mavitmTakvim .takvimGunleri td span{padding: 5px; display: block;}
+	.mavitmTakvim .takvimGunleri td span.izinsiz{background-color:#CCC; color:#666; cursor:default !important;}
+	.mavitmTakvim .takvimGunleri td span.izinli:hover{background-color:#069; color:#FFF;}
+	.mavitmTakvim .takvimHead{padding:3px; height:25px; background-color:#E1E1E1;}
+	.mavitmTakvim .takvimHead .takvimgeri{ float:left; margin-right:5px; margin-top:8px;}
+	.mavitmTakvim .takvimHead .takvimileri{ float:right; margin-top:8px;}
+	.mavitmTakvim .takvimHead select{-moz-border-radius: 5px;-webkit-border-radius:5px;border-radius:5px; padding:3px; float:left; border:1px solid #CCC;}
+	.mavitmTakvim .takvimFooter{height:15px; padding:4px; background-color:#E1E1E1;}
+	.mavitmTakvim .takvimFooter .bugunuYaz{float:left;}
+	.mavitmTakvim .takvimFooter .takvimKapat{float:right;}
+</pre>
+
 <h2>Sürüm Bilgileri</h2>
-        <p>
-        	v1.5
-        </p>
-        
-        <h2>Not:</h2>
-        <p>
-        	Kaynak kodlarını görüntülemek için <a href="jquery.takvim.js">buraya tıklayınız</a><br /><br />
-        </p>
-        <hr />
-        <a href="http://mavitm.com/2Bm6Bblogm5B3Bm6Bviewm5B9Bm6B1.html">Proje sayfasına git.</a>
-		<script type="text/javascript">
+	<p>v1.5</p>
 
-			$(function(){	
-				
-				$('.date').mavitmTakvim({baslangicYil:2005,bitisYil:2035,oncesiSecme:true});
-				$('.date2').mavitmTakvim({
-					baslangicYil:2008,
-					bitisYil:2011,
-					oncesiSecme:false,
-					ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara'
-				});
-				
-				$('.date3').mavitmTakvim({
-					oncesiSecme:false,
-					ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
-					tarihFormat:'d-m-Y'
-				});
+	<h2>Not:</h2>
+	<p>Kaynak kodlarını görüntülemek için <a href="jquery.takvim.js">buraya tıklayınız</a></p>
+	<br><br>
+	<hr>
+	<a href="http://mavitm.com/2Bm6Bblogm5B3Bm6Bviewm5B9Bm6B1.html">Proje sayfasına git.</a>
 
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+	<script type="text/javascript" src="jquery.takvim.js" charset="utf-8"></script>
 
-                $('.rdate2').mavitmTakvim({
-                    baslangicYil:2005,
-                    bitisYil:2035,
-                    oncesiSecme:true,
-                    engelliHaftaGun:'1,3,5,7',
-                    engelliAyGun:{4:[23],8:[30],10:[29],6:[27,28,11,8]}
-                });
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-36578934-1']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 
-                $('.rdate').mavitmTakvim({
-                    baslangicYil:2005,
-                    bitisYil:2035,
-                    oncesiSecme:true,
-                    onceUygula: function(tag){
-                        if($(tag).attr("id") == "checkout"){
-
-                            this._aktifDate = new Date();
-
-                            var dates = $("#checkin").val().split('/'); ////0-gun,1-ay,2-yil
-                            if(dates.length > 1) {
-                                var d = new Date(dates[1] + "/" + dates[0] + "/" + dates[2]);
-                                d.setDate(d.getDate() + 1);
-                                this._aktifDate = d;
-                            }
-                        }else{
-                            this._aktifDate = new Date();
-                        }
-                    },
-                    sonraUygula : function(tag){
-
-                        if($(tag).attr("id") == "checkin"){
-                            var eleman = $(tag);
-                            var kacGun = parseInt($(tag).attr("data-plusday"));
-                            if(!kacGun){kacGun = 1;}
-                            var dates = eleman.val().split('/'); ////0-gun,1-ay,2-yil
-                            var d = new Date(dates[1]+"/"+dates[0]+"/"+dates[2]);
-                            d.setDate(d.getDate()+kacGun);
-                            $("#checkout").val(d.getDate()+"/"+(d.getMonth() + 1)+"/"+ d.getFullYear());
-                        }
-
-                    }
-                });
-
-
+	<script type="text/javascript">
+		jQuery(function($){	
+			
+			$('.date').mavitmTakvim({baslangicYil:2005,bitisYil:2035,oncesiSecme:true});
+			$('.date2').mavitmTakvim({
+				baslangicYil:2008,
+				bitisYil:2011,
+				oncesiSecme:false,
+				ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara'
 			});
 			
-		</script>
+			$('.date3').mavitmTakvim({
+				oncesiSecme:false,
+				ay : 'Oc,Sub,Mar,Nis,May,Haz,Tem,Agu,Eyl,Eki,Kas,Ara',
+				tarihFormat:'d-m-Y'
+			});
+
+
+			$('.rdate2').mavitmTakvim({
+				baslangicYil:2005,
+				bitisYil:2035,
+				oncesiSecme:true,
+				engelliHaftaGun:'1,3,5,7',
+				engelliAyGun:{4:[23],8:[30],10:[29],6:[27,28,11,8]}
+			});
+
+			$('.rdate').mavitmTakvim({
+				baslangicYil:2005,
+				bitisYil:2035,
+				oncesiSecme:true,
+				onceUygula: function(tag){
+					if($(tag).attr("id") == "checkout"){
+
+						this._aktifDate = new Date();
+
+						var dates = $("#checkin").val().split('/'); ////0-gun,1-ay,2-yil
+						if(dates.length > 1) {
+							var d = new Date(dates[1] + "/" + dates[0] + "/" + dates[2]);
+							d.setDate(d.getDate() + 1);
+							this._aktifDate = d;
+						}
+					} else {
+						this._aktifDate = new Date();
+					}
+				},
+				sonraUygula : function(tag){
+
+					if($(tag).attr("id") == "checkin"){
+						var eleman = $(tag);
+						var kacGun = parseInt($(tag).attr("data-plusday"));
+						if(!kacGun){kacGun = 1;}
+						var dates = eleman.val().split('/'); ////0-gun,1-ay,2-yil
+						var d = new Date(dates[1]+"/"+dates[0]+"/"+dates[2]);
+						d.setDate(d.getDate()+kacGun);
+						$("#checkout").val(d.getDate()+"/"+(d.getMonth() + 1)+"/"+ d.getFullYear());
+					}
+
+				}
+			});
+		});
+	</script>
 </body>
 </html>
