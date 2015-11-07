@@ -1,7 +1,7 @@
 /**
  * @Author : Ayhan ERASLAN ayer50gmail.com
  * @link: http://mavitm.com/2Bm6Bblogm5B3Bm6Bviewm5B9Bm6B1.html 
- * @Version: 1.5
+ * @Version: 1.6
  * @param {Object} $
  */
 (function($){
@@ -299,16 +299,3 @@
     }
 
 })(jQuery);
-
-
-function dump(obj) {
-    var out = '';
-    for (var i in obj) {
-        out += i + ": " + obj[i] + "\n";
-    }
-    alert(out);
-
-    /*    var pre = document.createElement('pre');
-     pre.innerHTML = out;
-     document.body.appendChild(pre)*/
-}
