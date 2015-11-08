@@ -7,6 +7,7 @@ Haftanın ilk günü pazartesi olarak görüntüler. Başlangıç, bitiş yılla
 
 ## Örnekler
 > **Haftanın 1., 3., 5. ve 7. günlerini engellemek için:** 
+
 ```javascript
 $('.date').mavitmTakvim({
            baslangicYil:2005,
@@ -16,7 +17,7 @@ $('.date').mavitmTakvim({
     	  });
 ```
 
-**Giriş ve çıkış tarihi ile ilgili bir ilişki örneği**
+> **Giriş ve çıkış tarihi ile ilgili bir ilişki örneği**
 
 ```javascript
 $('.rdate').mavitmTakvim({
