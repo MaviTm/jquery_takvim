@@ -16,7 +16,7 @@ $('.date').mavitmTakvim({
     	  });
 ```
 
-> Giriş ve çıkış tarihi ile ilgili bir ilişki örneği
+**Giriş ve çıkış tarihi ile ilgili bir ilişki örneği**
 
 ```javascript
 $('.rdate').mavitmTakvim({
