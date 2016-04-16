@@ -1,7 +1,7 @@
 /**
  * @Author : Ayhan ERASLAN ayer50gmail.com
  * @link: http://mavitm.com/2Bm6Bblogm5B3Bm6Bviewm5B9Bm6B1.html 
- * @Version: 1.6
+ * @Version: 1.7
  * @param {Object} $
  */
 (function($){
@@ -26,6 +26,7 @@
 			'ileriText' : 'İleri',
 			'geriText' : 'Geri',
 			'tarihFormat':'d/m/Y',
+			'onceSifir':true,
 			'onceUygula' : function(){},
 			'sonraUygula' : function(){},
 			'_aktifDate': bugun
@@ -283,9 +284,19 @@
 		function inputmavitmGunYaz(eleman, formInput){
 			if($(eleman).hasClass("izinsiz")){ return false; }
 			clickGun = $(eleman).attr("data-gun");
-			clickAy = parseInt($(eleman).attr("data-ay"));
+			clickAy = String(parseInt($(eleman).attr("data-ay")) + 1);
 			clickYil = $(eleman).attr("data-yil");
-			var dateString = formatBelirle(clickGun,(clickAy+1),clickYil);
+
+			if(tConf.onceSifir == true){
+				if(clickGun.length < 2){
+					clickGun = '0'+clickGun;
+				}
+				if(clickAy.length < 2){
+					clickAy = '0'+clickAy;
+				}
+			}
+
+			var dateString = formatBelirle(clickGun, clickAy, clickYil);
 			formInput.val(dateString).change().blur();
 			tConf.sonraUygula(formInput);
 			takvimKapat();
