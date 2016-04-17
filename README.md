@@ -2,7 +2,7 @@
 
 Haftanın ilk günü pazartesi olarak görüntüler. Başlangıç, bitiş yılları ayarlanabilinir, İstenirse geçmiş tarihleri seçimden kaldırılabilinir.
 
-## v1.5 - Yeni Özellikler
+## Yeni Özellikler
 > **Yeni eklenen tetikleyicier:** Ayarlarda onceUygula ve sonraUygula isimlerinde iki farklı tetikleyici eklendi. onceUygula metodu tanimlanirsa takvim govdesi olusmadan calisan ve this ile degiskenlere ulasir set veya get edebilirsiniz. Metoda parametre eklerseniz this haricinde  aktif olan inputa bu parametre ile erişebilirsiniz. this sadece sınıf degiskenlerini sunar. sonraUygula ayni onceUygula mantığı ile aynı düzende çalışır ve inputa gun bilgisi yazıldıktan sonra işlem yapar
 
 ## Örnekler
